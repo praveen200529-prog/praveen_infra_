@@ -1,5 +1,5 @@
 node_modules/
 .env
 .DS_Store
-Backend/node_modules/
-Backend/.env
+backend/node_modules/
+backend/.env
