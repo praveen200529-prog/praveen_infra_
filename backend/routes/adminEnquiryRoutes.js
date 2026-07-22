@@ -27,8 +27,7 @@ router.get('/', protect(), async (req, res) => {
       countParams.push(search, search, search);
     }
 
-    sql += ' ORDER BY submitted_at DESC LIMIT ? OFFSET ?';
-    params.push(limit, offset);
+    sql += ` ORDER BY submitted_at DESC LIMIT ${parseInt(limit)} OFFSET ${parseInt(offset)}`;
 
     const [rows]  = await pool.execute(sql, params);
     const [[{total}]] = await pool.execute(countSql, countParams);
