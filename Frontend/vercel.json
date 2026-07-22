@@ -9,6 +9,10 @@
   ],
   "rewrites": [
     {
+      "source": "/portal/projects/:id",
+      "destination": "/portal/project-detail"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "https://praveen-infra.onrender.com/api/$1"
     },
