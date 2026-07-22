@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enquiries — Praveen Infra Portal</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy-deep:#081524;--navy:#0c2038;--navy-mid:#122c49;--navy-soft:#1c3a5e;--gold:#c79a3d;--gold-light:#e8c778;--gold-dim:#9c7b32;--off-white:#f6f4ee;--paper:#f5f3ed;--slate:#5c6672;--slate-light:#8b93a0;--white:#ffffff;--line:rgba(10,27,46,0.08);--line-light:rgba(255,255,255,0.1);--sidebar-w:260px;--ease:cubic-bezier(.22,1,.36,1);--font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;--font-mono:'IBM Plex Mono',monospace;--success:#4caf87;--warning:#e8a33a;--danger:#e05252;}
+*{margin:0;padding:0;box-sizing:border-box;}body{font-family:var(--font-body);background:var(--paper);color:var(--navy-deep);display:flex;min-height:100vh;}
+a{color:inherit;text-decoration:none;}button{font-family:inherit;cursor:pointer;border:none;background:none;}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-deep);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;border-right:1px solid rgba(255,255,255,.06);}
+.sidebar-logo{padding:28px 24px;border-bottom:1px solid var(--line-light);}
+.sidebar-logo .brand{font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--white);}
+.sidebar-logo .brand span{color:var(--gold-light);}
+.sidebar-logo .badge{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-top:4px;}
+.sidebar-user{padding:18px 24px;border-bottom:1px solid var(--line-light);display:flex;align-items:center;gap:12px;}
+.user-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dim),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--navy-deep);flex-shrink:0;}
+.user-info .name{font-size:13.5px;font-weight:500;color:var(--white);}
+.user-info .role{font-family:var(--font-mono);font-size:10px;color:var(--gold-dim);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+.sidebar-nav{flex:1;padding:16px 0;overflow-y:auto;}
+.nav-section{padding:8px 24px 4px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(139,147,160,.5);}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 24px;color:rgba(246,244,238,.6);font-size:13.5px;font-weight:500;transition:all .25s;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--off-white);background:rgba(255,255,255,.04);}
+.nav-item.active{color:var(--gold-light);border-left-color:var(--gold);background:rgba(199,154,61,.08);}
+.nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:.7;}
+.nav-item.active svg,.nav-item:hover svg{opacity:1;}
+.sidebar-footer{padding:20px 24px;border-top:1px solid var(--line-light);}
+.btn-logout{display:flex;align-items:center;gap:10px;color:rgba(246,244,238,.5);font-size:13px;cursor:pointer;padding:10px 0;transition:color .25s;}
+.btn-logout:hover{color:var(--danger);}
+.main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.topbar{background:var(--white);border-bottom:1px solid var(--line);padding:18px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:16px;flex-wrap:wrap;}
+.topbar h1{font-family:var(--font-display);font-size:22px;font-weight:600;}
+.content{padding:36px;flex:1;}
+.toolbar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.search-box{position:relative;}
+.search-box input{padding:9px 14px 9px 38px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;background:var(--white);color:var(--navy-deep);outline:none;width:280px;transition:border-color .25s;}
+.search-box input:focus{border-color:var(--gold-dim);}
+.search-box svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--slate-light);}
+.enq-table{background:var(--white);border-radius:12px;border:1px solid var(--line);overflow:hidden;}
+.enq-table table{width:100%;border-collapse:collapse;}
+.enq-table th{padding:13px 18px;text-align:left;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-light);background:rgba(10,27,46,.03);border-bottom:1px solid var(--line);}
+.enq-table td{padding:15px 18px;font-size:13.5px;border-bottom:1px solid var(--line);vertical-align:top;}
+.enq-table tr:last-child td{border-bottom:none;}
+.enq-table tr{cursor:pointer;transition:background .15s;}
+.enq-table tr:hover td{background:rgba(199,154,61,.04);}
+.enq-table tr.expanded td{background:rgba(199,154,61,.03);}
+.type-badge{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;padding:4px 9px;border-radius:12px;background:rgba(10,27,46,.07);color:var(--navy-soft);}
+.enq-detail{display:none;padding:20px;background:rgba(199,154,61,.04);border-top:1px dashed rgba(199,154,61,.2);}
+.enq-detail p{font-size:13.5px;color:var(--slate);line-height:1.7;margin-bottom:12px;}
+.enq-detail .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;}
+.enq-detail .dg-item .lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-light);margin-bottom:3px;}
+.enq-detail .dg-item .val{font-size:13px;font-weight:500;}
+.pagination{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:20px;}
+.page-btn{padding:7px 14px;border:1px solid var(--line);border-radius:6px;font-size:13px;cursor:pointer;transition:all .2s;color:var(--slate);}
+.page-btn:hover,.page-btn.active{background:var(--navy-deep);color:var(--off-white);border-color:var(--navy-deep);}
+.page-btn:disabled{opacity:.4;cursor:not-allowed;}
+.count-badge{font-family:var(--font-mono);font-size:11px;background:rgba(199,154,61,.12);color:var(--gold-dim);padding:4px 10px;border-radius:12px;margin-left:auto;}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="brand">PRAVEEN <span>INFRA</span></div><div class="badge">Internal Portal</div></div>
+  <div class="sidebar-user"><div class="user-avatar" id="userAvatar">PI</div><div class="user-info"><div class="name" id="userName">—</div><div class="role" id="userRole">—</div></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item" href="/portal/dashboard"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Dashboard</a>
+    <a class="nav-item" href="/portal/projects"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>Projects</a>
+    <a class="nav-item" href="/portal/analytics"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Analytics</a>
+    <a class="nav-item active" href="/portal/enquiries"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>Enquiries</a>
+    <div class="nav-section admin-only" style="display:none">Admin</div>
+    <a class="nav-item admin-only" href="/portal/users" style="display:none"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>User Management</a>
+  </nav>
+  <div class="sidebar-footer"><button class="btn-logout" id="logoutBtn"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>Sign Out</button></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <h1>Enquiries <span class="count-badge" id="totalCount">0 total</span></h1>
+    <button onclick="exportCSV()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--line);border-radius:8px;font-size:13px;color:var(--slate);cursor:pointer;transition:all .2s;">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Export CSV
+    </button>
+  </div>
+  <div class="content">
+    <div class="toolbar">
+      <div class="search-box">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+        <input type="search" id="searchInput" placeholder="Search by name, email, project type…">
+      </div>
+    </div>
+    <div class="enq-table">
+      <table>
+        <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Project Type</th><th>Date</th><th>Details</th></tr></thead>
+        <tbody id="enqTableBody"><tr><td colspan="6" style="padding:30px;text-align:center;color:var(--slate-light);">Loading enquiries…</td></tr></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</main>
+
+<script>
+const token = localStorage.getItem('pi_token');
+const user  = JSON.parse(localStorage.getItem('pi_user')||'null');
+if (!token||!user) window.location.href='/portal/login';
+document.getElementById('userName').textContent=user?.name;
+document.getElementById('userRole').textContent=user?.role;
+document.getElementById('userAvatar').textContent=(user?.name||'PI').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+if(user?.role==='admin') document.querySelectorAll('.admin-only').forEach(el=>el.style.display='');
+document.getElementById('logoutBtn').addEventListener('click',()=>{localStorage.clear();window.location.href='/portal/login';});
+
+let currentPage = 1;
+let searchTimer = null;
+let allEnquiries = [];
+
+const api=url=>fetch(url,{headers:{Authorization:'Bearer '+token}}).then(r=>{if(r.status===401)window.location.href='/portal/login';return r.json();});
+
+function loadEnquiries(page=1) {
+  currentPage = page;
+  const search = document.getElementById('searchInput').value.trim();
+  let url = `/portal/api/enquiries?page=${page}&limit=20`;
+  if (search) url += '&search=' + encodeURIComponent(search);
+
+  api(url).then(data => {
+    allEnquiries = data.enquiries || [];
+    document.getElementById('totalCount').textContent = (data.pagination?.total||0) + ' total';
+
+    const tbody = document.getElementById('enqTableBody');
+    if (!allEnquiries.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="padding:30px;text-align:center;color:var(--slate-light);">No enquiries found</td></tr>';
+      document.getElementById('pagination').innerHTML = '';
+      return;
+    }
+
+    tbody.innerHTML = allEnquiries.map((e,i) => `
+      <tr onclick="toggleDetail(${i})" id="row-${i}">
+        <td style="font-family:var(--font-mono);font-size:12px;color:var(--slate-light);">#${e.id}</td>
+        <td><strong>${e.full_name}</strong>${e.company?`<div style="font-size:12px;color:var(--slate-light);">${e.company}</div>`:''}</td>
+        <td><a href="mailto:${e.email}" style="color:var(--gold-dim);" onclick="event.stopPropagation()">${e.email}</a>${e.phone?`<div style="font-size:12px;color:var(--slate-light);">${e.phone}</div>`:''}</td>
+        <td><span class="type-badge">${e.project_type}</span></td>
+        <td style="font-family:var(--font-mono);font-size:12px;color:var(--slate-light);">${new Date(e.submitted_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</td>
+        <td style="color:var(--gold-dim);font-size:12.5px;">Click to expand ↓</td>
+      </tr>
+      <tr id="detail-${i}" style="display:none;">
+        <td colspan="6" style="padding:0;">
+          <div class="enq-detail">
+            <div class="detail-grid">
+              <div class="dg-item"><div class="lbl">IP Address</div><div class="val" style="font-family:var(--font-mono);font-size:12px;">${e.ip_address||'—'}</div></div>
+              <div class="dg-item"><div class="lbl">Submitted</div><div class="val">${new Date(e.submitted_at).toLocaleString('en-IN')}</div></div>
+              <div class="dg-item"><div class="lbl">Company</div><div class="val">${e.company||'—'}</div></div>
+            </div>
+            <p><strong>Project Details:</strong><br>${e.project_details}</p>
+          </div>
+        </td>
+      </tr>`).join('');
+
+    // Pagination
+    const pg = data.pagination;
+    const pgEl = document.getElementById('pagination');
+    if (pg.pages <= 1) { pgEl.innerHTML=''; return; }
+    pgEl.innerHTML = `
+      <button class="page-btn" onclick="loadEnquiries(${pg.page-1})" ${pg.page<=1?'disabled':''}>← Prev</button>
+      <span style="font-size:13px;color:var(--slate);">Page ${pg.page} of ${pg.pages}</span>
+      <button class="page-btn" onclick="loadEnquiries(${pg.page+1})" ${pg.page>=pg.pages?'disabled':''}>Next →</button>`;
+  });
+}
+loadEnquiries();
+
+function toggleDetail(i) {
+  const detail = document.getElementById('detail-'+i);
+  const row    = document.getElementById('row-'+i);
+  const isOpen = detail.style.display !== 'none';
+  detail.style.display = isOpen ? 'none' : 'table-row';
+  row.classList.toggle('expanded', !isOpen);
+}
+
+document.getElementById('searchInput').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => loadEnquiries(1), 400);
+});
+
+function exportCSV() {
+  const headers = ['ID','Name','Company','Email','Phone','Project Type','Submitted At','Project Details','IP'];
+  const rows = allEnquiries.map(e => [e.id, e.full_name, e.company||'', e.email, e.phone||'', e.project_type, e.submitted_at, (e.project_details||'').replace(/\n/g,' '), e.ip_address||'']);
+  const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'enquiries_' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+}
+</script>
+</body>
+</html>

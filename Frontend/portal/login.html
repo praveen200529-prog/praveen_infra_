@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Login — Praveen Infra</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-deep:#081524;--navy:#0c2038;--navy-mid:#122c49;--navy-soft:#1c3a5e;
+  --gold:#c79a3d;--gold-light:#e8c778;--gold-dim:#9c7b32;
+  --off-white:#f6f4ee;--paper:#fbfaf7;--slate:#5c6672;--slate-light:#8b93a0;
+  --white:#ffffff;--line:rgba(10,27,46,0.1);--line-light:rgba(255,255,255,0.12);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  --danger:#e05252;--success:#4caf87;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font-body);background:var(--navy-deep);color:var(--off-white);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+a{color:inherit;text-decoration:none;}
+::selection{background:var(--gold);color:var(--navy-deep);}
+
+/* Background */
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(199,154,61,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(199,154,61,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.bg-orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(80px);opacity:.25;}
+.bg-orb-1{width:500px;height:500px;background:radial-gradient(var(--gold-dim),transparent);top:-100px;right:-100px;}
+.bg-orb-2{width:400px;height:400px;background:radial-gradient(var(--navy-soft),transparent);bottom:-80px;left:-60px;}
+
+/* Card */
+.login-wrap{position:relative;z-index:10;width:100%;max-width:440px;padding:24px;}
+.logo-area{text-align:center;margin-bottom:44px;}
+.logo-area .brand{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--white);letter-spacing:-.01em;}
+.logo-area .brand span{color:var(--gold-light);}
+.logo-area .sub{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;color:var(--slate-light);margin-top:6px;text-transform:uppercase;}
+.logo-icon{width:56px;height:56px;background:linear-gradient(135deg,var(--navy-mid),var(--navy-soft));border:1px solid var(--gold-dim);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 0 40px rgba(199,154,61,.15);}
+.logo-icon svg{width:28px;height:28px;color:var(--gold-light);}
+
+.card{background:rgba(18,44,73,.45);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid var(--line-light);border-radius:16px;padding:40px;box-shadow:0 32px 80px rgba(0,0,0,.4);}
+.card-title{font-family:var(--font-display);font-size:22px;font-weight:600;margin-bottom:6px;}
+.card-sub{font-size:14px;color:var(--slate-light);margin-bottom:32px;}
+
+.field{margin-bottom:20px;}
+.field label{display:block;font-size:12.5px;font-weight:500;color:var(--slate-light);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+.field input{
+  width:100%;background:rgba(6,15,26,.6);border:1px solid rgba(255,255,255,.1);
+  color:var(--white);padding:13px 16px;border-radius:8px;font-family:var(--font-body);font-size:15px;
+  transition:border-color .25s,box-shadow .25s;outline:none;
+}
+.field input:focus{border-color:var(--gold-dim);box-shadow:0 0 0 3px rgba(199,154,61,.12);}
+.field input::placeholder{color:var(--slate-light);}
+
+.btn-login{
+  width:100%;padding:15px;background:var(--gold);color:var(--navy-deep);
+  border:none;border-radius:8px;font-family:var(--font-display);font-size:15px;font-weight:600;
+  cursor:pointer;transition:all .3s var(--ease);margin-top:8px;position:relative;overflow:hidden;
+  letter-spacing:.02em;
+}
+.btn-login:hover:not(:disabled){background:var(--gold-light);box-shadow:0 8px 32px rgba(199,154,61,.35);}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;}
+.btn-login .spinner{display:none;width:18px;height:18px;border:2px solid rgba(8,21,36,.3);border-top-color:var(--navy-deep);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;}
+.btn-login.loading .btn-text{display:none;}
+.btn-login.loading .spinner{display:block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.back-link{text-align:center;margin-top:24px;font-size:13px;color:var(--slate-light);}
+.back-link a{color:var(--gold-light);transition:color .2s;}
+.back-link a:hover{color:var(--gold);}
+
+.alert{display:none;padding:12px 16px;border-radius:8px;font-size:13.5px;margin-bottom:20px;border:1px solid;}
+.alert.error{background:rgba(224,82,82,.12);border-color:rgba(224,82,82,.3);color:#f08080;}
+.alert.success{background:rgba(76,175,135,.12);border-color:rgba(76,175,135,.3);color:#7ed8b5;}
+.alert.show{display:block;}
+
+.portal-badge{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;color:var(--gold-dim);text-transform:uppercase;text-align:center;margin-bottom:28px;display:flex;align-items:center;gap:10px;justify-content:center;}
+.portal-badge::before,.portal-badge::after{content:'';flex:1;height:1px;background:var(--line-light);}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+
+<div class="login-wrap">
+  <div class="logo-area">
+    <div class="logo-icon">
+      <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+      </svg>
+    </div>
+    <div class="brand">PRAVEEN <span>INFRA</span></div>
+    <div class="sub">Employee Portal</div>
+  </div>
+
+  <div class="portal-badge">Secure Internal Access</div>
+
+  <div class="card">
+    <h1 class="card-title">Welcome back</h1>
+    <p class="card-sub">Sign in with your employee credentials.</p>
+
+    <div class="alert error" id="alertBox"></div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@praveeninfra.com" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn-login" id="loginBtn">
+        <span class="btn-text">Sign In</span>
+        <div class="spinner"></div>
+      </button>
+    </form>
+  </div>
+
+  <div class="back-link"><a href="/">← Back to public website</a></div>
+</div>
+
+<script>
+  // Redirect if already logged in
+  const token = localStorage.getItem('pi_token');
+  if (token) {
+    // Quick verify
+    fetch('/portal/api/auth/me', { headers: { Authorization: 'Bearer ' + token } })
+      .then(r => r.ok ? (window.location.href = '/portal/dashboard') : null)
+      .catch(() => {});
+  }
+
+  const form    = document.getElementById('loginForm');
+  const btn     = document.getElementById('loginBtn');
+  const alertBox = document.getElementById('alertBox');
+
+  function showAlert(msg, type = 'error') {
+    alertBox.textContent = msg;
+    alertBox.className = 'alert ' + type + ' show';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    alertBox.className = 'alert';
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+      const res  = await fetch('/portal/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert(data.message || 'Login failed.');
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        return;
+      }
+
+      localStorage.setItem('pi_token', data.token);
+      localStorage.setItem('pi_user',  JSON.stringify(data.user));
+
+      showAlert('Login successful! Redirecting…', 'success');
+      setTimeout(() => { window.location.href = '/portal/dashboard'; }, 600);
+    } catch {
+      showAlert('Network error. Is the server running?');
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

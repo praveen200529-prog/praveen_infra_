@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Management — Praveen Infra Portal</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy-deep:#081524;--navy:#0c2038;--navy-mid:#122c49;--navy-soft:#1c3a5e;--gold:#c79a3d;--gold-light:#e8c778;--gold-dim:#9c7b32;--off-white:#f6f4ee;--paper:#f5f3ed;--slate:#5c6672;--slate-light:#8b93a0;--white:#ffffff;--line:rgba(10,27,46,0.08);--line-light:rgba(255,255,255,0.1);--sidebar-w:260px;--ease:cubic-bezier(.22,1,.36,1);--font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;--font-mono:'IBM Plex Mono',monospace;--success:#4caf87;--warning:#e8a33a;--danger:#e05252;}
+*{margin:0;padding:0;box-sizing:border-box;}body{font-family:var(--font-body);background:var(--paper);color:var(--navy-deep);display:flex;min-height:100vh;}
+a{color:inherit;text-decoration:none;}button{font-family:inherit;cursor:pointer;border:none;background:none;}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-deep);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;border-right:1px solid rgba(255,255,255,.06);}
+.sidebar-logo{padding:28px 24px;border-bottom:1px solid var(--line-light);}
+.sidebar-logo .brand{font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--white);}
+.sidebar-logo .brand span{color:var(--gold-light);}
+.sidebar-logo .badge{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-top:4px;}
+.sidebar-user{padding:18px 24px;border-bottom:1px solid var(--line-light);display:flex;align-items:center;gap:12px;}
+.user-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dim),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--navy-deep);flex-shrink:0;}
+.user-info .name{font-size:13.5px;font-weight:500;color:var(--white);}
+.user-info .role{font-family:var(--font-mono);font-size:10px;color:var(--gold-dim);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+.sidebar-nav{flex:1;padding:16px 0;overflow-y:auto;}
+.nav-section{padding:8px 24px 4px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(139,147,160,.5);}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 24px;color:rgba(246,244,238,.6);font-size:13.5px;font-weight:500;transition:all .25s;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--off-white);background:rgba(255,255,255,.04);}
+.nav-item.active{color:var(--gold-light);border-left-color:var(--gold);background:rgba(199,154,61,.08);}
+.nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:.7;}
+.nav-item.active svg,.nav-item:hover svg{opacity:1;}
+.sidebar-footer{padding:20px 24px;border-top:1px solid var(--line-light);}
+.btn-logout{display:flex;align-items:center;gap:10px;color:rgba(246,244,238,.5);font-size:13px;cursor:pointer;padding:10px 0;transition:color .25s;}
+.btn-logout:hover{color:var(--danger);}
+.main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.topbar{background:var(--white);border-bottom:1px solid var(--line);padding:18px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar h1{font-family:var(--font-display);font-size:22px;font-weight:600;}
+.content{padding:36px;flex:1;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy-deep);padding:10px 20px;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer;transition:all .3s;}
+.btn-primary:hover{background:var(--gold-light);box-shadow:0 6px 20px rgba(199,154,61,.3);}
+.user-table{background:var(--white);border-radius:12px;border:1px solid var(--line);overflow:hidden;}
+.user-table table{width:100%;border-collapse:collapse;}
+.user-table th{padding:13px 18px;text-align:left;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-light);background:rgba(10,27,46,.03);border-bottom:1px solid var(--line);}
+.user-table td{padding:15px 18px;font-size:13.5px;border-bottom:1px solid var(--line);}
+.user-table tr:last-child td{border-bottom:none;}
+.user-table tr:hover td{background:rgba(199,154,61,.03);}
+.role-badge{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;padding:4px 9px;border-radius:12px;}
+.role-admin{background:rgba(199,154,61,.12);color:var(--gold-dim);}
+.role-employee{background:rgba(28,58,94,.08);color:var(--navy-soft);}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
+.active-dot{background:var(--success);}
+.inactive-dot{background:var(--slate-light);}
+.btn-sm{padding:7px 14px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid;}
+.btn-deact{background:rgba(224,82,82,.06);color:var(--danger);border-color:rgba(224,82,82,.2);}
+.btn-deact:hover{background:rgba(224,82,82,.12);}
+.btn-react{background:rgba(76,175,135,.06);color:var(--success);border-color:rgba(76,175,135,.2);}
+.btn-react:hover{background:rgba(76,175,135,.12);}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(6,15,26,.7);z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);}
+.modal-bg.show{display:flex;}
+.modal{background:var(--white);border-radius:16px;width:100%;max-width:480px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.25);}
+.modal-head{padding:22px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.modal-head h2{font-family:var(--font-display);font-size:17px;font-weight:600;}
+.btn-close{width:30px;height:30px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.modal-body{padding:24px;}
+.form-field{margin-bottom:16px;}
+.form-field label{display:block;font-size:11.5px;font-weight:500;color:var(--slate);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.form-field input,.form-field select{width:100%;padding:11px 13px;border:1px solid rgba(10,27,46,.15);border-radius:8px;font-family:var(--font-body);font-size:14px;color:var(--navy-deep);outline:none;transition:border-color .2s;}
+.form-field input:focus,.form-field select:focus{border-color:var(--gold-dim);}
+.modal-foot{padding:18px 24px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;}
+.btn-cancel{padding:9px 18px;border:1px solid var(--line);border-radius:7px;font-size:13.5px;color:var(--slate);cursor:pointer;}
+.btn-save{padding:9px 22px;background:var(--gold);color:var(--navy-deep);border-radius:7px;font-size:13.5px;font-weight:600;cursor:pointer;}
+.btn-save:disabled{opacity:.6;cursor:not-allowed;}
+.alert-msg{padding:10px 14px;border-radius:7px;font-size:13px;margin-bottom:14px;display:none;}
+.alert-msg.error{background:rgba(224,82,82,.1);color:#c0392b;border:1px solid rgba(224,82,82,.2);display:block;}
+.alert-msg.success{background:rgba(76,175,135,.1);color:#2e7d5f;border:1px solid rgba(76,175,135,.2);display:block;}
+.user-avatar-sm{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--navy-mid),var(--navy-soft));display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--off-white);flex-shrink:0;margin-right:10px;vertical-align:middle;}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="brand">PRAVEEN <span>INFRA</span></div><div class="badge">Internal Portal</div></div>
+  <div class="sidebar-user"><div class="user-avatar" id="userAvatar">PI</div><div class="user-info"><div class="name" id="userName">—</div><div class="role" id="userRole">—</div></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item" href="/portal/dashboard"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Dashboard</a>
+    <a class="nav-item" href="/portal/projects"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>Projects</a>
+    <a class="nav-item" href="/portal/analytics"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Analytics</a>
+    <a class="nav-item" href="/portal/enquiries"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>Enquiries</a>
+    <div class="nav-section">Admin</div>
+    <a class="nav-item active" href="/portal/users"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>User Management</a>
+  </nav>
+  <div class="sidebar-footer"><button class="btn-logout" id="logoutBtn"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>Sign Out</button></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <h1>User Management</h1>
+    <button class="btn-primary" id="btnNewUser">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+      New User
+    </button>
+  </div>
+  <div class="content">
+    <div class="user-table">
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+        <tbody id="userTableBody"><tr><td colspan="6" style="padding:30px;text-align:center;color:var(--slate-light);">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<div class="modal-bg" id="userModal">
+  <div class="modal">
+    <div class="modal-head"><h2>New Employee Account</h2><button class="btn-close" id="btnCloseModal"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+    <div class="modal-body">
+      <div class="alert-msg" id="userAlert"></div>
+      <div class="form-field"><label>Full Name *</label><input type="text" id="uName" placeholder="Employee full name"></div>
+      <div class="form-field"><label>Email Address *</label><input type="email" id="uEmail" placeholder="name@praveeninfra.com"></div>
+      <div class="form-field"><label>Role</label>
+        <select id="uRole"><option value="employee">Employee</option><option value="admin">Admin</option></select>
+      </div>
+      <div class="form-field"><label>Initial Password *</label><input type="password" id="uPassword" placeholder="Min 6 characters"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" id="btnCancelModal">Cancel</button>
+      <button class="btn-save" id="btnSaveUser">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const token = localStorage.getItem('pi_token');
+const user  = JSON.parse(localStorage.getItem('pi_user')||'null');
+if (!token||!user||user.role!=='admin') { alert('Admin access required.'); window.location.href='/portal/dashboard'; }
+document.getElementById('userName').textContent=user?.name;
+document.getElementById('userRole').textContent=user?.role;
+document.getElementById('userAvatar').textContent=(user?.name||'PI').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+document.getElementById('logoutBtn').addEventListener('click',()=>{localStorage.clear();window.location.href='/portal/login';});
+
+const api=(url,opts={})=>fetch(url,{...opts,headers:{Authorization:'Bearer '+token,'Content-Type':'application/json',...opts.headers}}).then(r=>{if(r.status===401)window.location.href='/portal/login';return r.json();});
+
+function loadUsers() {
+  api('/portal/api/users').then(data => {
+    const tbody = document.getElementById('userTableBody');
+    if (!data.users?.length) { tbody.innerHTML='<tr><td colspan="6" style="padding:30px;text-align:center;color:var(--slate-light);">No users found</td></tr>'; return; }
+    tbody.innerHTML = data.users.map(u => `
+      <tr>
+        <td>
+          <span class="user-avatar-sm">${u.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</span>
+          <strong>${u.name}</strong>
+        </td>
+        <td style="color:var(--slate);">${u.email}</td>
+        <td><span class="role-badge role-${u.role}">${u.role}</span></td>
+        <td><span class="status-dot ${u.is_active?'active-dot':'inactive-dot'}"></span>${u.is_active?'Active':'Inactive'}</td>
+        <td style="font-family:var(--font-mono);font-size:12px;color:var(--slate-light);">${new Date(u.created_at).toLocaleDateString('en-IN')}</td>
+        <td>
+          ${u.id !== user.id ? `
+          <button class="btn-sm ${u.is_active?'btn-deact':'btn-react'}" onclick="toggleStatus(${u.id},${u.is_active?0:1})">
+            ${u.is_active ? 'Deactivate' : 'Reactivate'}
+          </button>` : '<span style="font-size:12px;color:var(--slate-light);">You</span>'}
+        </td>
+      </tr>`).join('');
+  });
+}
+loadUsers();
+
+async function toggleStatus(id, newVal) {
+  const action = newVal ? 'reactivate' : 'deactivate';
+  if (!confirm(`Are you sure you want to ${action} this user?`)) return;
+  const data = await api('/portal/api/users/'+id+'/status', { method:'PATCH', body: JSON.stringify({ is_active: newVal }) });
+  if (data.success) loadUsers();
+  else alert(data.message || 'Error');
+}
+
+const modal = document.getElementById('userModal');
+document.getElementById('btnNewUser').addEventListener('click', () => modal.classList.add('show'));
+document.getElementById('btnCloseModal').addEventListener('click', () => modal.classList.remove('show'));
+document.getElementById('btnCancelModal').addEventListener('click', () => modal.classList.remove('show'));
+
+document.getElementById('btnSaveUser').addEventListener('click', async () => {
+  const name  = document.getElementById('uName').value.trim();
+  const email = document.getElementById('uEmail').value.trim();
+  const pass  = document.getElementById('uPassword').value;
+  const role  = document.getElementById('uRole').value;
+  const alertEl = document.getElementById('userAlert');
+  alertEl.className='alert-msg';
+
+  if (!name||!email||!pass) { alertEl.className='alert-msg error'; alertEl.textContent='All fields are required.'; return; }
+  if (pass.length < 6) { alertEl.className='alert-msg error'; alertEl.textContent='Password must be at least 6 characters.'; return; }
+
+  const btn = document.getElementById('btnSaveUser');
+  btn.disabled=true; btn.textContent='Creating…';
+  const data = await api('/portal/api/users', { method:'POST', body: JSON.stringify({ name, email, password: pass, role }) });
+  btn.disabled=false; btn.textContent='Create Account';
+
+  if (data.success) {
+    alertEl.className='alert-msg success'; alertEl.textContent='Account created successfully!';
+    setTimeout(() => { modal.classList.remove('show'); loadUsers(); }, 800);
+  } else {
+    alertEl.className='alert-msg error'; alertEl.textContent=data.message||'Error creating user.';
+  }
+});
+</script>
+</body>
+</html>
