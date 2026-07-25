@@ -96,7 +96,7 @@ export function Hero() {
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.1, ease: easeOut, delay: 0.6 }}
-        className="pointer-events-none absolute right-4 top-24 hidden w-64 lg:block xl:right-0 xl:w-72"
+        className="pointer-events-none relative mt-16 w-60 self-center lg:absolute lg:right-4 lg:top-24 lg:mt-0 lg:w-64 xl:right-0 xl:w-72"
       >
         <div className="animate-float-slow">
           <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card shadow-2xl shadow-black/40">
@@ -120,7 +120,7 @@ export function Hero() {
       {/* Scroll cue */}
       <motion.div
         style={{ opacity: fade }}
-        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground sm:flex"
+        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground"
       >
         <span className="text-[11px] uppercase tracking-[0.2em]">Scroll</span>
         <span className="h-10 w-px bg-gradient-to-b from-accent to-transparent" />

@@ -143,7 +143,7 @@ export function BillX() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="animate-float-slow absolute -bottom-6 left-2 hidden rounded-2xl border border-border bg-background/80 px-5 py-4 backdrop-blur-xl sm:block"
+            className="animate-float-slow absolute -bottom-6 left-2 origin-bottom-left scale-90 rounded-2xl border border-border bg-background/80 px-4 py-3 backdrop-blur-xl sm:scale-100 sm:px-5 sm:py-4"
           >
             <p className="text-xs text-muted-foreground">Live variance alert</p>
             <p className="mt-1 font-serif text-2xl text-accent">₹53,998</p>
