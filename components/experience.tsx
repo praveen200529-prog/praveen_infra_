@@ -86,7 +86,7 @@ export function Experience() {
             </h4>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               Awarded by Kandhan Infra Pvt. Ltd. for successful delivery of a
-              full-stack construction financial intelligence platform.
+              software developer construction financial intelligence platform.
             </p>
 
             <dl className="mt-6 space-y-3 border-t border-border pt-5 text-sm">

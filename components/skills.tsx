@@ -43,7 +43,7 @@ export function Skills() {
       <SectionLabel index="02" title="Capabilities" />
       <Reveal delay={0.05}>
         <h2 className="mt-8 max-w-2xl text-balance text-3xl font-medium tracking-tight sm:text-4xl">
-          A full-stack toolkit, used with intent.
+          A software developer toolkit, used with intent.
         </h2>
       </Reveal>
 

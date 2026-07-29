@@ -21,14 +21,14 @@ const instrumentSerif = Instrument_Serif({
 })
 
 export const metadata: Metadata = {
-  title: 'Praveen P — Full-Stack Developer',
+  title: 'Praveen P — Software Developer',
   description:
-    'Full-stack developer who built BillX, an enterprise construction finance platform. Specializing in React, Node.js, MySQL and REST API architecture.',
+    'Software developer who built BillX, an enterprise construction finance platform. Specializing in React, Node.js, MySQL and REST API architecture.',
   generator: 'v0.app',
   openGraph: {
-    title: 'Praveen P — Full-Stack Developer',
+    title: 'Praveen P — Software Developer',
     description:
-      'Full-stack developer who builds enterprise-grade financial software. Creator of BillX.',
+      'Software developer who builds enterprise-grade financial software. Creator of BillX.',
     type: 'website',
   },
 }

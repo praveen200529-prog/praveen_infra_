@@ -34,7 +34,7 @@ export function Hero() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
           </span>
-          Available for full-stack roles &amp; collaborations
+          Available for software developer roles &amp; collaborations
         </motion.div>
 
         <h1 className="max-w-4xl text-balance text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[5.5rem]">
@@ -53,7 +53,7 @@ export function Hero() {
           className="mt-8 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg"
         >
           I&apos;m <span className="text-foreground">Praveen P</span>, a
-          full-stack developer who shipped{' '}
+          software developer who shipped{' '}
           <span className="text-foreground">BillX</span> — an enterprise
           construction-finance platform — during my internship at Kandhan Infra.
           I work across React, Node.js and MySQL to make complex systems feel
